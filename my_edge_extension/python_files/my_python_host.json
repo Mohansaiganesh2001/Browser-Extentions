@@ -1,9 +1,0 @@
-{
-    "name": "com.my_python.host",
-    "description": "Edge extension to run Python",
-    "path": "C:\\Users\\mohan.ganesh\\OneDrive - MetricStream, Inc\\Desktop\\my_edge_extension\\python_files\\my_python_host.bat",
-    "type": "stdio",
-    "allowed_origins": [
-        "chrome-extension://kkjhmmeplijppnjodklejafhopioipmi/"
-    ]
-}

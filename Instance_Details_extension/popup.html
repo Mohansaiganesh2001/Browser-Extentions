@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instance Details</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 16px;
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: #f3f4f6;
+        color: #111827;
+        min-width: 320px;
+        min-height: 280px;
+      }
+
+      .card {
+        background: #fff;
+        padding: 16px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      h1 {
+        font-size: 1.2rem;
+        margin: 0;
+      }
+
+      .url-row,
+      .status-row {
+        font-size: 0.9rem;
+        margin: 0;
+        word-break: break-all;
+      }
+
+      button {
+        border: none;
+        background: #2563eb;
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        cursor: pointer;
+      }
+
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .response {
+        border-top: 1px solid #e5e7eb;
+        padding-top: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .raw-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .raw-copy-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+      }
+
+      .response h2 {
+        font-size: 1rem;
+        margin: 0;
+      }
+
+      .ghost-button {
+        background: transparent;
+        color: #2563eb;
+        border: 1px solid #bfdbfe;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 0.85rem;
+      }
+
+      .ghost-button:hover:not(:disabled) {
+        background: #eff6ff;
+      }
+
+      .detail {
+        font-size: 0.9rem;
+      }
+
+      pre {
+        margin: 0;
+        padding: 8px;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        max-height: 160px;
+        overflow: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Instance Details</h1>
+      <p class="url-row" id="currentUrl">Current URL: —</p>
+      <p class="status-row" id="statusText">Status: Idle</p>
+      <button id="runBtn">Send Current URL</button>
+
+      <div class="response">
+        <h2>Response</h2>
+        <div class="detail" id="dbInfo">DB: —</div>
+        <div class="detail" id="sshInfo">SSH: —</div>
+        <div class="raw-copy">
+          <div class="raw-copy-actions">
+            <button id="copyBtn" class="ghost-button" type="button">Copy raw JSON</button>
+          </div>
+          <pre id="responseRaw">No response yet.</pre>
+        </div>
+      </div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>

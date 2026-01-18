@@ -1,0 +1,22 @@
+{
+    "name": "com.objectmanager.host",
+    "description": "Edge extension to manage objects",
+    "path": "C:\\Users\\mohan.ganesh\\OneDrive - MetricStream, Inc\\Mohan-git\\Browser-Extentions\\Extract_Objects\\python_files\\object_manager_host.bat",
+    "type": "stdio",
+    "allowed_origins": [
+        "chrome-extension://hgjkcbgofmagbajaccecjmgbbcokfnak/"
+    ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

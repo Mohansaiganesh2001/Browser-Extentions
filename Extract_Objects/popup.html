@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Object Manager</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 16px;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f3f4f6;
+      color: #111827;
+      min-width: 400px;
+      min-height: 500px;
+    }
+
+    .card {
+      background: #fff;
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    h1 {
+      font-size: 1.2rem;
+      margin: 0;
+      color: #0078d4;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 5px;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 12px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 14px;
+      color: #666;
+      border-bottom: 2px solid transparent;
+    }
+
+    .tab-btn.active {
+      color: #0078d4;
+      border-bottom-color: #0078d4;
+      font-weight: 600;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    select, input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    button {
+      border: none;
+      background: #2563eb;
+      color: #fff;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn-danger {
+      background: #d13438;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      width: auto;
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      margin-top: 0;
+    }
+
+    .message {
+      margin-top: 10px;
+      padding: 8px;
+      border-radius: 4px;
+      font-size: 13px;
+      display: none;
+    }
+
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .stats {
+      background: #f8f9fa;
+      padding: 8px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .objects-list {
+      max-height: 350px;
+      overflow-y: scroll;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-top: 8px;
+    }
+
+    .objects-list::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .objects-list::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+
+    .objects-list::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+    }
+
+    .objects-list::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    .object-item {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .object-item:last-child {
+      border-bottom: none;
+    }
+
+    .object-type {
+      font-weight: 600;
+      color: #0078d4;
+      font-size: 13px;
+    }
+
+    .object-name {
+      color: #333;
+      font-size: 14px;
+    }
+
+    .delete-icon {
+      cursor: pointer;
+      color: #d13438;
+      font-size: 18px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 30px;
+      color: #999;
+    }
+
+    .empty-state small {
+      display: block;
+      margin-top: 8px;
+      font-size: 11px;
+      color: #666;
+    }
+
+    .object-info {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Object Manager</h1>
+    
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="add">Add Object</button>
+      <button class="tab-btn" data-tab="delete">Delete Object</button>
+      <button class="tab-btn" data-tab="view">View All</button>
+      <button class="tab-btn" data-tab="extract">Extract</button>
+    </div>
+
+    <div id="add-tab" class="tab-content active">
+      <div class="form-group">
+        <label for="object-type">Object Type:</label>
+        <select id="object-type">
+          <option value="">-- Select Type --</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="object-name">Object Name:</label>
+        <input type="text" id="object-name" placeholder="Enter object name">
+      </div>
+      
+      <button id="add-btn" class="btn btn-primary">Add Object</button>
+      <div id="add-message" class="message"></div>
+    </div>
+
+    <div id="delete-tab" class="tab-content">
+      <div class="form-group">
+        <label for="delete-name">Object Name:</label>
+        <input type="text" id="delete-name" placeholder="Enter object name to delete">
+      </div>
+      
+      <button id="delete-btn" class="btn btn-danger">Delete Object</button>
+      <div id="delete-message" class="message"></div>
+    </div>
+
+    <div id="view-tab" class="tab-content">
+      <div class="actions">
+        <button id="refresh-btn" class="btn btn-secondary">Refresh</button>
+        <button id="export-btn" class="btn btn-secondary">Export to File</button>
+        <button id="clear-all-btn" class="btn btn-danger">Clear All</button>
+      </div>
+      
+      <div class="stats">
+        <span>Total Objects: <strong id="total-count">0</strong></span>
+      </div>
+      
+      <div class="search-box">
+        <input type="text" id="search-input" placeholder="Search objects...">
+      </div>
+      
+      <div id="objects-list" class="objects-list"></div>
+    </div>
+
+    <div id="extract-tab" class="tab-content">
+      <div class="form-group">
+        <label for="customer">Customer:</label>
+        <input type="text" id="customer">
+      </div>
+      <div class="form-group">
+        <label for="module-name">Module Name:</label>
+        <input type="text" id="module-name">
+      </div>
+      <div class="form-group">
+        <label for="object-list">Object List Path:</label>
+        <input type="text" id="object-list">
+      </div>
+      <div class="form-group">
+        <label for="workspace-path">Workspace Path:</label>
+        <input type="text" id="workspace-path">
+      </div>
+      <div class="form-group">
+        <label for="instance-name">Instance Name:</label>
+        <input type="text" id="instance-name">
+      </div>
+      <div class="form-group">
+        <label for="pull-dependent">Pull Dependent Objects:</label>
+        <select id="pull-dependent">
+          <option value="true">true</option>
+          <option value="false">false</option>
+        </select>
+      </div>
+      <button id="save-params-btn">Save Parameters</button>
+      <button id="extract-btn" style="background: #28a745;">Extract Objects</button>
+      <div id="extract-message" class="message"></div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

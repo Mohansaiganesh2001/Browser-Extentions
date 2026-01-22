@@ -67,6 +67,7 @@ function setupEventListeners() {
   document.getElementById('search-input').addEventListener('input', filterObjects);
   document.getElementById('save-params-btn').addEventListener('click', saveParams);
   document.getElementById('extract-btn').addEventListener('click', runExtract);
+  document.getElementById('git-clean-btn').addEventListener('click', runGitClean);
 }
 
 function sendNativeMessage(message) {
@@ -368,5 +369,19 @@ async function runExtract() {
     }
   } catch (error) {
     showMessage(messageDiv, 'Failed to run extract: ' + error.message, 'error');
+  }
+}
+
+async function runGitClean() {
+  const messageDiv = document.getElementById('extract-message');
+  try {
+    const response = await sendNativeMessage({ action: 'run_git_clean' });
+    if (response.status === 'success') {
+      showMessage(messageDiv, 'GIT Clean started', 'success');
+    } else {
+      showMessage(messageDiv, response.message, 'error');
+    }
+  } catch (error) {
+    showMessage(messageDiv, 'Failed to run GIT Clean: ' + error.message, 'error');
   }
 }

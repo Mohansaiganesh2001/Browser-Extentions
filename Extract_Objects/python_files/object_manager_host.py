@@ -21,6 +21,7 @@ VALID_OBJECTS = [x.strip() for x in CONFIG.get('valid_objects', '').split(',')]
 NULL_OBJECTS = [x.strip() for x in CONFIG.get('null_objects', '').split(',')]
 PARAM_FILE = CONFIG.get('param_file', '')
 EXTRACT_FILE = CONFIG.get('param_extract', '')
+GIT_CLEAN_FILE = CONFIG.get('git_clean_bat', '')
 
 def read_message():
     raw_length = sys.stdin.buffer.read(4)
@@ -131,6 +132,15 @@ def run_extract():
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
+def run_git_clean():
+    if not os.path.exists(GIT_CLEAN_FILE):
+        return {"status": "error", "message": "GIT Clean file not found"}
+    try:
+        subprocess.Popen(GIT_CLEAN_FILE, shell=True, cwd=os.path.dirname(GIT_CLEAN_FILE))
+        return {"status": "success", "message": "GIT Clean started"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
 def main():
     while True:
         msg = read_message()
@@ -154,6 +164,8 @@ def main():
                 response = save_params(msg.get("params", {}))
             elif action == "run_extract":
                 response = run_extract()
+            elif action == "run_git_clean":
+                response = run_git_clean()
             else:
                 response = {"status": "error", "message": "Unknown action"}
         except Exception as e:
